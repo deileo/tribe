@@ -2,17 +2,37 @@
 
 namespace Tribe\Controller;
 
-use Tribe\Entity\User;
+use Tribe\Repository\UserRepository;
 use Tribe\Request\Request;
 use Tribe\Response\JsonResponse;
+use Tribe\Service\UserService;
 use Tribe\Validator\UserCreateValidator;
 use Tribe\Validator\UserUpdateValidator;
 
 class UserController implements Controller
 {
+    private UserService $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService(new UserRepository());
+    }
+
     public function index(): JsonResponse
     {
-        return new JsonResponse(JsonResponse::STATUS_OK, "Hello world!");
+        $users = [];
+        foreach ($this->userService->findAll() as $user) {
+            $users[] = $user->toArray();
+        }
+
+        return new JsonResponse(JsonResponse::STATUS_OK, $users);
+    }
+
+    public function get(Request $request): JsonResponse
+    {
+        $user = $this->userService->findById($request->getUrlParam());
+
+        return new JsonResponse(JsonResponse::STATUS_OK, $user ? $user->toArray() : 'Not found!');
     }
 
     public function create(Request $request): JsonResponse
@@ -23,11 +43,7 @@ class UserController implements Controller
             return new JsonResponse(JsonResponse::STATUS_BAD_REQUEST, $errors);
         }
 
-        $user = new User();
-        $user->setEmail($params['email']);
-        $user->setFirstName($params['firstName']);
-        $user->setLastName($params['lastName']);
-        $user->setRoles($params['roles']);
+        $user = $this->userService->save($params);
 
         return new JsonResponse(JsonResponse::STATUS_CREATED, $user->toArray());
     }
@@ -40,11 +56,10 @@ class UserController implements Controller
             return new JsonResponse(JsonResponse::STATUS_BAD_REQUEST, $errors);
         }
 
-        $user = new User();
-        $user->setEmail($params['email']);
-        $user->setFirstName($params['firstName']);
-        $user->setLastName($params['lastName']);
-        $user->setRoles($params['roles']);
+        $user = $this->userService->update($request->getUrlParam(), $params);
+        if (!$user) {
+            return new JsonResponse(JsonResponse::STATUS_NOT_FOUND, 'User not found!');
+        }
 
         return new JsonResponse(JsonResponse::STATUS_OK);
     }
