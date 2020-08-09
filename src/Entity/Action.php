@@ -44,6 +44,11 @@ class Action
         $this->alias = $alias;
     }
 
+    public function isActionAllowed(array $roles): bool
+    {
+        return !empty(array_intersect($this->getRoles(), $roles));
+    }
+
     public function toArray(): array
     {
         return [

@@ -7,6 +7,7 @@ use Tribe\Controller\Controller;
 use Tribe\Controller\Error404Controller;
 use Tribe\Controller\ErrorController;
 use Tribe\Controller\HomeController;
+use Tribe\Controller\PermissionController;
 use Tribe\Controller\UserController;
 
 class ControllerFactory
@@ -15,6 +16,7 @@ class ControllerFactory
     private const HOME_ROUTE = '';
     private const USER_ROUTE = 'users';
     private const ACTION_ROUTE = 'actions';
+    private const PERMISSION_ROUTE = 'permissions';
 
     private string $url;
 
@@ -37,6 +39,8 @@ class ControllerFactory
                 return new UserController();
             case self::ACTION_ROUTE:
                 return new ActionController();
+            case self::PERMISSION_ROUTE:
+                return new PermissionController();
             default:
                 return new Error404Controller();
         }

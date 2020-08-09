@@ -19,6 +19,11 @@ class ActionService
         return $this->actionRepo->findById($actionId);
     }
 
+    public function findByAlias(string $alias)
+    {
+        return $this->actionRepo->findByAlias($alias);
+    }
+
     /**
      * @return Action[]
      */

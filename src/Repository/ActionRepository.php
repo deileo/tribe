@@ -42,6 +42,17 @@ class ActionRepository
         return $row ? $this->toAction($row) : null;
     }
 
+    public function findByAlias(string $alias): ?Action
+    {
+        $sql = "SELECT * FROM actions WHERE alias = :alias";
+        $query = $this->db->prepare($sql);
+        $query->execute([':alias' => $alias]);
+
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $row ? $this->toAction($row) : null;
+    }
+
     public function insert(Action $action): void
     {
         $sql = "INSERT INTO actions(alias, name, roles) VALUES (:alias, :name, :roles)";
