@@ -8,15 +8,20 @@ class Action
 {
     use RolesTrait;
 
-    private int $id;
+    private ?int $id = null;
 
     private string $name;
 
     private string $alias;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): string
@@ -42,6 +47,7 @@ class Action
     public function toArray(): array
     {
         return [
+            'id' => $this->getId(),
             'name' => $this->getName(),
             'alias' => $this->getAlias(),
             'roles' => $this->getRoles()
