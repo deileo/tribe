@@ -14,7 +14,7 @@ class JsonResponse
     private int $status;
     private $body;
 
-    public function __construct(int $status, $body)
+    public function __construct(int $status, $body = null)
     {
         $this->status = $status;
         $this->body = $body;
@@ -42,6 +42,6 @@ class JsonResponse
 
     public function serialize()
     {
-        return json_encode($this->body);
+        return json_encode(is_null($this->body) ? '' : $this->body);
     }
 }
