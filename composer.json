@@ -3,5 +3,8 @@
     "psr-4": {
       "Tribe\\": "src/"
     }
+  },
+  "require": {
+    "ext-json": "*"
   }
 }

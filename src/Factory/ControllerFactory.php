@@ -2,15 +2,19 @@
 
 namespace Tribe\Factory;
 
+use Tribe\Controller\ActionController;
 use Tribe\Controller\Controller;
 use Tribe\Controller\Error404Controller;
 use Tribe\Controller\ErrorController;
 use Tribe\Controller\HomeController;
+use Tribe\Controller\UserController;
 
 class ControllerFactory
 {
     public const URL_DELIMITER = '/';
     private const HOME_ROUTE = '';
+    private const USER_ROUTE = 'users';
+    private const ACTION_ROUTE = 'actions';
 
     private string $url;
 
@@ -29,6 +33,10 @@ class ControllerFactory
         switch ($parts[1]) {
             case self::HOME_ROUTE:
                 return new HomeController();
+            case self::USER_ROUTE:
+                return new UserController();
+            case self::ACTION_ROUTE:
+                return new ActionController();
             default:
                 return new Error404Controller();
         }
